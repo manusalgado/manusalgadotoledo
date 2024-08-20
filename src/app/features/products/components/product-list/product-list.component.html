@@ -1,0 +1,39 @@
+<div class="product-list-container">
+  <div class="search-bar">
+    <label for="search">Search:</label>
+    <input id="search" [formControl]="searchControl" placeholder="Search products...">
+  </div>
+
+  <div class="page-size-selector">
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" [formControl]="pageSizeControl">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+    </select>
+  </div>
+
+  <div class="product-list">
+    <ng-container *ngIf="products$ | async as products">
+      <ul *ngIf="products.length > 0">
+        <li *ngFor="let product of products">
+          <div class="product-details">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <span>Release Date: {{ product.date_release | date }}</span>
+            <span>Revision Date: {{ product.date_revision | date }}</span>
+            <button (click)="onEditProduct(product.id)">Edit</button>
+            <button (click)="openConfirmDeleteModal(product.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+      <p *ngIf="products.length === 0">No products found.</p>
+    </ng-container>
+  </div>
+
+  <app-confirm-delete-modal *ngIf="showModal"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </app-confirm-delete-modal>
+</div>
